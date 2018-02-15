@@ -1,5 +1,3 @@
-require "venues_near_me_cli_app/version"
-
-module VenuesNearMeCliApp
-  # Your code goes here...
-end
+require_relative "./venues_near_me_cli_app/version"
+require_relative './venues_near_me_cli_app/venue'
+require_relative './venues_near_me_cli_app/cli'

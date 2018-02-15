@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "venues_near_me_cli_app"
+
+VenuesNearMeCliApp::CLI.new.call
