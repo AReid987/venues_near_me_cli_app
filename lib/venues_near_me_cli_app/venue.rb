@@ -1,22 +1,26 @@
 class VenuesNearMeCliApp::Venue
   attr_accessor :name, :address, :phone, :url
-  def self.venues
-    #return instances of venues
 
-    venue_1 = self.new
-    venue_1.name = "Mohawk"
-    venue_1.address = "912 Red River St Austin, TX 78701"
-    venue_1.phone = "(512) 666-0877"
-    venue_1.url = "https://mohawkaustin.com/"
+  def self.scrape_yelp
+    venues = []
+    user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.854.0 Safari/535.2"
+    @zipcode = VenuesNearMeCliApp::CLI.zipcode
+    url = "https://www.yelp.com/search?find_desc=Music+Venues&find_loc=#{@zipcode}&start=0"
+    doc = Nokogiri::HTML(open(url, 'User-Agent' => user_agent))
+    venues_doc = doc.css("li.regular-search-result")
 
-    venue_2 = self.new
-    venue_2.name = "Parish"
-    venue_2.address = "214 E 6th St Austin, TX 78701"
-    venue_2.phone = nil
-    venue_2.url = "https://theparishaustin.com/"
-
-    [venue_1, venue_2]
+    venues_doc.collect.with_index do |venue, i|
+      venue = VenuesNearMeCliApp::Venue.new
+      venue.name = venues_doc.css("h3.search-result-title a span")[i].text.strip
+      venue.address = venues_doc.css("div.secondary-attributes address")[i].to_s.gsub('<br>', ' ').gsub('<address>', ' ').gsub('</address>', ' ').strip
+      url = venues_doc.css("h3.search-result-title span.indexed-biz-name a")[i].attribute("href").value.strip
+      venue_page = Nokogiri::HTML(open("https://www.yelp.com#{url}", 'User-Agent' => user_agent))
+      venue_url = venue_page.css("li span.biz-website.js-biz-website.js-add-url-tagging a").attribute("href").value
+      venue.url = venue_url[/[w]+.\w+.(com)/]
+      venue.phone = venues_doc.css("div.secondary-attributes span.biz-phone")[i].text.strip
+      venues << venue
+    end
+    venues
   end
-
 
 end
