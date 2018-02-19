@@ -3,7 +3,7 @@ class VenuesNearMeCliApp::Venue
 
   def self.scrape_yelp
     venues = []
-    user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.854.0 Safari/535.2"
+    user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
     @zipcode = VenuesNearMeCliApp::CLI.zipcode
     url = "https://www.yelp.com/search?find_desc=Music+Venues&find_loc=#{@zipcode}&start=0"
     doc = Nokogiri::HTML(open(url, 'User-Agent' => user_agent))
