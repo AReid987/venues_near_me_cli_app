@@ -13,10 +13,10 @@ class VenuesNearMeCliApp::Venue
       venue = VenuesNearMeCliApp::Venue.new
       venue.name = venues_doc.css("h3.search-result-title a span")[i].text.strip
       venue.address = venues_doc.css("div.secondary-attributes address")[i].to_s.gsub('<br>', ' ').gsub('<address>', ' ').gsub('</address>', ' ').strip
-      url = venues_doc.css("h3.search-result-title span.indexed-biz-name a")[i].attribute("href").value.strip
-      venue_page = Nokogiri::HTML(open("https://www.yelp.com#{url}", 'User-Agent' => user_agent))
-      venue_url = venue_page.css("li span.biz-website.js-biz-website.js-add-url-tagging a").attribute("href").value
-      venue.url = venue_url[/[w]+.\w+.(com)/]
+      #url = venues_doc.css("h3.search-result-title span.indexed-biz-name a")[i].attribute("href").value.strip
+      #venue_page = Nokogiri::HTML(open("https://www.yelp.com#{url}", 'User-Agent' => user_agent))
+      #venue_url = venue_page.css("li span.biz-website.js-biz-website.js-add-url-tagging a").attribute("href").value
+      #venue.url = venue_url[/[w]+.\w+.(com)/]
       venue.phone = venues_doc.css("div.secondary-attributes span.biz-phone")[i].text.strip
       venues << venue
     end
